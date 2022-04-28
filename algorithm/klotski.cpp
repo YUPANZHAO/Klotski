@@ -5,24 +5,24 @@ set< vector<int> > vis;
 
 struct Move {
     vector<int> now;
-    int id, dire; // dire 0 ±íÊ¾ÍùÉÏ»òÍù×ó 1 ±íÊ¾ÍùÏÂ»òÍùÓÒ
+    int id, dire; // dire 0 è¡¨ç¤ºå¾€ä¸Šæˆ–å¾€å·¦ 1 è¡¨ç¤ºå¾€ä¸‹æˆ–å¾€å³
 };
 
 map< vector<int>, Move > path; 
 
-vector<int> s; // ÆğÊ¼×´Ì¬ 6 * 6 ¾ØÕó±âÆ½»¯
+vector<int> s; // èµ·å§‹çŠ¶æ€ 6 * 6 çŸ©é˜µæ‰å¹³åŒ–
 
 queue< vector<int> > q;
 
-int dire[20]; // 0 ´ú±íË®Æ½·½Ïò 1 ´ú±í´¹Ö±·½Ïò
+int dire[20]; // 0 ä»£è¡¨æ°´å¹³æ–¹å‘ 1 ä»£è¡¨å‚ç›´æ–¹å‘
 
-int n, g; // ±íÊ¾·½¿é¸öÊı£¬gÎªÄ¿±ê¿é
+int n, g; // è¡¨ç¤ºæ–¹å—ä¸ªæ•°ï¼Œgä¸ºç›®æ ‡å—
 
 int e(int x, int y) {
     return x * 6 + y;
 }
 
-bool isend(vector<int> & map) { // ¼ì²éÊÇ·ñµ½ÖÕµã  
+bool isend(vector<int> & map) { // æ£€æŸ¥æ˜¯å¦åˆ°ç»ˆç‚¹  
     int x, y;
     for(int i=0; i < 6; i++) 
         for(int j=0; j < 6; j++) 
@@ -38,12 +38,12 @@ bool isend(vector<int> & map) { // ¼ì²éÊÇ·ñµ½ÖÕµã
     return true;
 }
 
-bool check(int x, int y) { // ¼ì²é£¨x, y£©ÊÇ·ñºÏ·¨
+bool check(int x, int y) { // æ£€æŸ¥ï¼ˆx, yï¼‰æ˜¯å¦åˆæ³•
     if(x < 0 || x >= 6 || y < 0 || y >= 6) return false;
     return true;
 }
 
-vector<int> move(vector<int> map, int id, int dir) { // ½²µØÍ¼mapÖĞ±àºÅÎªidµÄ¿é°´dir·½ÏòÒÆ¶¯
+vector<int> move(vector<int> map, int id, int dir) { // è®²åœ°å›¾mapä¸­ç¼–å·ä¸ºidçš„å—æŒ‰diræ–¹å‘ç§»åŠ¨
     int x, y;
     for(int i=0; i < 6; i++) 
         for(int j=0; j < 6; j++) 
@@ -143,15 +143,15 @@ void printres(vector<int> & now) {
     printf("%d ", m.id);
     if(dire[m.id]) {
         if(m.dire) {
-            printf("ÏòÏÂÒÆ¶¯\n");
+            printf("å‘ä¸‹ç§»åŠ¨\n");
         }else {
-            printf("ÏòÉÏÒÆ¶¯\n");
+            printf("å‘ä¸Šç§»åŠ¨\n");
         }
     }else {
         if(m.dire) {
-            printf("ÏòÓÒÒÆ¶¯\n");
+            printf("å‘å³ç§»åŠ¨\n");
         }else {
-            printf("Ïò×óÒÆ¶¯\n");
+            printf("å‘å·¦ç§»åŠ¨\n");
         }
     }
     putchar('\n');
