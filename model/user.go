@@ -21,9 +21,6 @@ func FindUserByEmail(email string) (user User, err error) {
 	if rows.Next() {
 		user = User{}
 		err = rows.Scan(&user.ID, &user.Email, &user.Password, &user.GameCounts)
-		if err != nil {
-			return
-		}
 	}
 	return
 }

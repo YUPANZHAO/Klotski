@@ -5,4 +5,4 @@ GET http://localhost:8080/login?userEmail=yupanzhao2022@163.com&password=123456 
 GET http://localhost:8080/sendCode?userEmail=yupanzhao2022@163.com HTTP/1.1
 
 ### register
-POST http://localhost:8080/register?userEmail=yupanzhao2022@163.com&password=123456&code=9657 HTTP/1.1
+POST http://localhost:8080/register?userEmail=yupanzhao2022@163.com&password=123456&code=112677 HTTP/1.1

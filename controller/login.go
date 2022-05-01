@@ -17,13 +17,18 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 	user, err := model.FindUserByEmail(userEmail)
 	if err != nil {
 		log.Print(err.Error())
-		w.WriteHeader(500) // Mysql发生错误
+		model.WriteMessage(w, 500, "mysql错误: "+err.Error(), nil)
 		return
 	}
-	w.WriteHeader(200)
 	if user.Password == password {
-		w.Write([]byte("SUCCESS"))
+		token, err := model.NewToken(user.ID)
+		if err != nil {
+			log.Fatal(err.Error())
+			model.WriteMessage(w, 500, "token生成失败: "+err.Error(), nil)
+			return
+		}
+		model.WriteMessage(w, 200, "登录成功", token)
 	} else {
-		w.Write([]byte("FAIL"))
+		model.WriteMessage(w, 401, "登录失败", nil)
 	}
 }

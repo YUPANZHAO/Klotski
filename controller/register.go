@@ -29,25 +29,24 @@ func handleRegitser(w http.ResponseWriter, r *http.Request) {
 	ok, err := checkCode(userEmail, code)
 	if err != nil {
 		log.Print(err.Error())
-		w.WriteHeader(500) // Redis发生错误
+		model.WriteMessage(w, 500, "redis错误: "+err.Error(), nil)
 		return
 	}
 	// 验证码错误或已过期
 	if !ok {
-		w.WriteHeader(200) // Redis发生错误
-		w.Write([]byte("验证码错误或已过期"))
+		model.WriteMessage(w, 401, "验证码错误或已过期", nil)
 		return
 	}
 	// 检查该邮箱是否已注册
 	user, err := model.FindUserByEmail(userEmail)
 	if err != nil {
 		log.Print(err.Error())
-		w.WriteHeader(500) // Mysql发生错误
+		model.WriteMessage(w, 500, "mysql发生错误: "+err.Error(), nil)
 		return
 	}
 	// 邮箱已经注册
 	if user != (model.User{}) {
-		w.Write([]byte("该邮箱已被注册"))
+		model.WriteMessage(w, 401, "该邮箱已被注册", nil)
 		return
 	}
 	// 注册账号
@@ -57,12 +56,11 @@ func handleRegitser(w http.ResponseWriter, r *http.Request) {
 	err = user.AddUser()
 	if err != nil {
 		log.Print(err.Error())
-		w.WriteHeader(500) // Mysql发生错误
+		model.WriteMessage(w, 500, "mysql发生错误: "+err.Error(), nil)
 		return
 	}
 	// 注册成功
-	w.WriteHeader(200)
-	w.Write([]byte("注册成功"))
+	model.WriteMessage(w, 200, "注册成功", nil)
 }
 
 // 获取验证码接口，并将验证码设置60秒生存期
@@ -75,18 +73,18 @@ func handleSendCode(w http.ResponseWriter, r *http.Request) {
 	err := sendVerifyEmail(userEmail, code)
 	if err != nil {
 		log.Print(err.Error())
-		w.WriteHeader(500) // 验证邮件发送失败
+		model.WriteMessage(w, 500, "验证邮件发送失败: "+err.Error(), nil)
 		return
 	}
 	// 写入redis并设置60秒生存期
 	err = setCode(userEmail, code)
 	if err != nil {
 		log.Print(err.Error())
-		w.WriteHeader(500) // Redis发生错误
+		model.WriteMessage(w, 500, "redis错误: "+err.Error(), nil)
 		return
 	}
 	// 验证邮件发送成功
-	w.WriteHeader(200)
+	model.WriteMessage(w, 200, "验证邮件发送成功", nil)
 }
 
 // 向toEmail的邮箱发送包含验证码的邮件
@@ -117,14 +115,14 @@ func generateCode() string {
 // 写入redis并设置60秒生存期
 func setCode(key string, value string) (err error) {
 	rdb := common.RedisDB
-	err = rdb.Set(key, value, 60*time.Second).Err()
+	err = rdb.Set("verifyCode_"+key, value, 60*time.Second).Err()
 	return
 }
 
 // 检查验证码是否正确且未过期
 func checkCode(key string, value string) (result bool, err error) {
 	rdb := common.RedisDB
-	res := rdb.Get(key)
+	res := rdb.Get("verifyCode_" + key)
 	err = res.Err()
 	if err != nil {
 		return
