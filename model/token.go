@@ -15,7 +15,7 @@ func NewToken(id int) (token Token, err error) {
 	// 生成不重复的token
 	for {
 		token.Token = randStr(32)
-		if !IsTokenExist(token.Token) {
+		if !isTokenExist(token.Token) {
 			break
 		}
 	}
@@ -43,7 +43,7 @@ func randStr(length int) string {
 }
 
 // 判断token是否存在
-func IsTokenExist(token string) (exist bool) {
+func isTokenExist(token string) (exist bool) {
 	res := common.RedisDB.Get(token)
 	_, err := res.Int()
 	return err == nil

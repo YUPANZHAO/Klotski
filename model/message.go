@@ -6,9 +6,9 @@ import (
 )
 
 type Message struct {
-	Code int
-	Msg  string
-	Data any
+	Code int    //状态码
+	Msg  string //消息
+	Data any    //数据
 }
 
 func NewMessage() Message {

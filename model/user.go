@@ -5,10 +5,10 @@ import (
 )
 
 type User struct {
-	ID         int
-	Email      string
-	Password   string
-	GameCounts int
+	ID         int    //用户编号
+	Email      string //用户邮箱
+	Password   string //用户密码
+	GameCounts int    //用户剩余解密次数
 }
 
 // 根据邮箱查找用户信息
