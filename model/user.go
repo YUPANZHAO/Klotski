@@ -31,3 +31,16 @@ func (user *User) AddUser() (err error) {
 	_, err = common.MysqlDB.Exec(sql, user.Email, user.Password, user.GameCounts)
 	return
 }
+
+func GetGameCountsByUserId(user_id any) (int, error) {
+	cnt := 0
+	sql := "SELECT gameCounts FROM user WHERE id = ?"
+	err := common.MysqlDB.QueryRow(sql, user_id).Scan(&cnt)
+	return cnt, err
+}
+
+func SubGameCountsByUserId(user_id any) (err error) {
+	sql := "UPDATE user SET gameCounts = gameCounts - 1 WHERE id = ?"
+	_, err = common.MysqlDB.Exec(sql, user_id)
+	return
+}

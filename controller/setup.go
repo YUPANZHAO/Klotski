@@ -4,4 +4,5 @@ func RegisterRoutes() {
 	registerLoginRoutes()
 	registerRegisterRoutes()
 	registerPayRoutes()
+	registerKlotskiSolveRoutes()
 }

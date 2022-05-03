@@ -10,3 +10,21 @@ POST http://localhost:8080/register?userEmail=yupanzhao2022@163.com&password=123
 ### pay
 GET http://localhost:8080/pay HTTP/1.1
 Authorization: Bearer 80kQ64Ru83n6578uEXz0P7mQGWthhL3E
+
+### solve
+GET http://localhost:8080/klotskiSolve?user_id=1 HTTP/1.1
+
+{
+    "width": 6,
+    "Height": 6,
+    "Data": [
+        [0, 0, 1, 2, 2, 2],
+        [3, 0, 1, 4, 0, 5],
+        [3, 6, 6, 4, 0, 5],
+        [0, 7, 0, 4, 0, 8],
+        [0, 7, 9, 9, 0, 8],
+        [0, 0, 0, 0, 0, 0]
+    ],
+    "BlockNumber": 9,
+    "Target": 6
+}
