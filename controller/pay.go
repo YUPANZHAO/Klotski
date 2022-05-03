@@ -1,12 +1,11 @@
 package controller
 
 import (
-	"KlotskiWeb/common"
 	"KlotskiWeb/model"
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
+	"strconv"
 	"time"
 )
 
@@ -19,17 +18,7 @@ func registerPayRoutes() {
 //发起支付
 func handlePay(w http.ResponseWriter, r *http.Request) {
 	//获取token及用户id
-	token := r.Header.Get("authorization")
-	if token == "" {
-		model.WriteMessage(w, 401, "未获取到用户token", nil)
-		return
-	}
-	res := common.RedisDB.Get(token[strings.Index(token, " ")+1:])
-	userId, err := res.Int()
-	if err != nil {
-		model.WriteMessage(w, 401, "token已过期，请重新登录", nil)
-		return
-	}
+	userId, _ := strconv.Atoi(r.URL.Query().Get("user_id"))
 	//配置订单
 	alipay := model.NewAlipayService()
 	//在订单表中添加订单
@@ -39,7 +28,7 @@ func handlePay(w http.ResponseWriter, r *http.Request) {
 	indent.UserId = userId
 	indent.AddGameCounts = 60
 	indent.Status = "待支付"
-	err = indent.AddIndent()
+	err := indent.AddIndent()
 	if err != nil {
 		log.Println(err.Error())
 		model.WriteMessage(w, 500, "mysql错误: "+err.Error(), nil)

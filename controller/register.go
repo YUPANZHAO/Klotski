@@ -24,7 +24,11 @@ func handleRegitser(w http.ResponseWriter, r *http.Request) {
 	userEmail := query.Get("userEmail")
 	password := query.Get("password")
 	code := query.Get("code")
-
+	//参数判空
+	if userEmail == "" || password == "" || code == "" {
+		model.WriteMessage(w, 400, "参数不全", nil)
+		return
+	}
 	// 检查验证码
 	ok, err := checkCode(userEmail, code)
 	if err != nil {
@@ -67,7 +71,11 @@ func handleRegitser(w http.ResponseWriter, r *http.Request) {
 func handleSendCode(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
 	userEmail := query.Get("userEmail")
-
+	//参数判空
+	if userEmail == "" {
+		model.WriteMessage(w, 400, "参数不全", nil)
+		return
+	}
 	// 生成并发送验证邮件
 	code := generateCode()
 	err := sendVerifyEmail(userEmail, code)

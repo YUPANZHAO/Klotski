@@ -2,8 +2,8 @@ package main
 
 import (
 	"KlotskiWeb/common"
-	"KlotskiWeb/config"
 	"KlotskiWeb/controller"
+	"KlotskiWeb/middleware"
 	"log"
 	"net/http"
 )
@@ -22,13 +22,13 @@ func main() {
 		log.Fatal(err.Error())
 	}
 	log.Print("Mysql连接成功")
-	//获取服务器配置
-	conf := config.NewServerConfig()
 	//配置服务器
 	server := http.Server{
-		Addr:    conf.Address,
-		Handler: conf.Handler,
+		Addr:    "localhost:8080",
+		Handler: &middleware.AuthMiddleware{},
 	}
+	//加载静态资源
+	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("wwwroot"))))
 	//注册路由
 	controller.RegisterRoutes()
 	//启动监听

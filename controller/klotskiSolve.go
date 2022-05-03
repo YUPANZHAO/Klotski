@@ -4,6 +4,7 @@ import (
 	"KlotskiWeb/model"
 	"encoding/json"
 	"fmt"
+	"log"
 	"math/rand"
 	"net/http"
 	"os"
@@ -18,12 +19,13 @@ func registerKlotskiSolveRoutes() {
 func handleKlotskiSolve(w http.ResponseWriter, r *http.Request) {
 	//用户id及随机数
 	user_id := r.URL.Query().Get("user_id")
+	log.Println(user_id)
 	rand.Seed(time.Now().Unix())
 	randNum := rand.Int() % 0x100000
 	//查看用户解密次数是否为0
 	cnt, err := model.GetGameCountsByUserId(user_id)
 	if err != nil || cnt <= 0 {
-		model.WriteMessage(w, 401, "用户次数为零", nil)
+		model.WriteMessage(w, 400, "用户次数为零", nil)
 		return
 	}
 	//获取请求Body
