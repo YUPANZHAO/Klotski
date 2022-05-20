@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/zyp1/Klotski/algorithm/TaskQueue.cpp
+TaskQueue.h
+/home/zyp1/Klotski/algorithm/TaskQueue.h
+
+/home/zyp1/Klotski/algorithm/TaskQueue.h
+queue
+-
+pthread.h
+-
+

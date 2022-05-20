@@ -1,0 +1,5 @@
+/home/zyp1/Klotski/algorithm/build/CMakeFiles/edit_cache.dir
+/home/zyp1/Klotski/algorithm/build/CMakeFiles/rebuild_cache.dir
+/home/zyp1/Klotski/algorithm/build/CMakeFiles/KlotskiSolve.dir
+/home/zyp1/Klotski/algorithm/build/CMakeFiles/ThreadPool.dir
+/home/zyp1/Klotski/algorithm/build/CMakeFiles/TaskQueue.dir
