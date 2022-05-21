@@ -31,12 +31,7 @@ func handleRegitser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// 检查验证码
-	ok, err := checkCode(userEmail, code)
-	if err != nil {
-		log.Print(err.Error())
-		model.WriteMessage(w, 500, "redis错误: "+err.Error(), nil)
-		return
-	}
+	ok := checkCode(userEmail, code)
 	// 验证码错误或已过期
 	if !ok {
 		model.WriteMessage(w, 401, "验证码错误或已过期", nil)
@@ -130,14 +125,9 @@ func setCode(key string, value string) (err error) {
 }
 
 // 检查验证码是否正确且未过期
-func checkCode(key string, value string) (result bool, err error) {
+func checkCode(key string, value string) (result bool) {
 	rdb := common.RedisDB
-	res := rdb.Get("verifyCode_" + key)
-	err = res.Err()
-	if err != nil {
-		return
-	}
-	code := res.Val()
+	code := rdb.Get("verifyCode_" + key).Val()
 	result = (code != "" && code == value)
 	return
 }
