@@ -12,10 +12,11 @@ GET http://localhost:8080/pay HTTP/1.1
 
 ### pay
 GET http://localhost:8080/pay HTTP/1.1
-Authorization: Bearer 80kQ64Ru83n6578uEXz0P7mQGWthhL3E
+Authorization: Bearer l2wneNpKYBjK38N8B118PKpuw8K4CQqD
 
 ### solve
 GET http://localhost:8080/klotskiSolve HTTP/1.1
+Authorization: Bearer l2wneNpKYBjK38N8B118PKpuw8K4CQqD
 
 {
     "width": 6,

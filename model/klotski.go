@@ -3,7 +3,10 @@ package model
 import (
 	"bufio"
 	"fmt"
-	"os"
+	"log"
+	"net"
+	"strconv"
+	"strings"
 )
 
 type KlotskiData struct {
@@ -22,44 +25,102 @@ type KlotskiResult struct {
 	Data    [][][]int //滑块编号二维数组
 }
 
-func (data *KlotskiData) WriterToFile(filePath string) error {
-	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-	writer := bufio.NewWriter(file)
-	fmt.Fprintln(writer, data.Width, data.Height)
+func (data *KlotskiData) Obj2Str() string {
+	str := ""
+	str += fmt.Sprintf("%d %d", data.Width, data.Height)
 	for i := 0; i < data.Height; i++ {
 		for j := 0; j < data.Width; j++ {
-			fmt.Fprint(writer, data.Data[i][j], " ")
+			str += " "
+			str += fmt.Sprint(data.Data[i][j])
 		}
-		fmt.Fprintln(writer)
 	}
-	fmt.Fprintln(writer, data.BlockNumber, data.Target)
-	writer.Flush()
-	return nil
+	str += fmt.Sprintf(" %d %d", data.BlockNumber, data.Target)
+	return str
 }
 
-func (result *KlotskiResult) ReadFromFile(filePath string) error {
-	file, err := os.Open(filePath)
+func (data *KlotskiData) Solve() (result KlotskiResult, err error) {
+	//连接算法解析接口
+	conn, err := net.Dial("tcp", "192.168.71.2:4331")
 	if err != nil {
-		return err
+		log.Println("连接：" + err.Error())
+		return
 	}
-	defer file.Close()
-	reader := bufio.NewReader(file)
-	fmt.Fscanf(reader, "%d %d %d %d", &result.Width, &result.Height, &result.Target, &result.DataLen)
-	fmt.Fscanln(reader)
-	result.Data = make([][][]int, result.DataLen)
-	for k := 0; k < result.DataLen; k++ {
-		result.Data[k] = make([][]int, result.Height)
-		for i := 0; i < result.Height; i++ {
-			result.Data[k][i] = make([]int, result.Width)
-			for j := 0; j < result.Width; j++ {
-				fmt.Fscanf(reader, "%d", &result.Data[k][i][j])
-			}
-			fmt.Fscanln(reader)
+	defer conn.Close()
+	//将对象转换为字符串格式
+	str := data.Obj2Str()
+	//发送数据
+	_, err = conn.Write([]byte(str))
+	if err != nil {
+		log.Println("发送：" + err.Error())
+		return
+	}
+	// fmt.Println("发送数据完毕")
+	//接收数据
+	var buf [1024]byte
+	str = ""
+	reader := bufio.NewReader(conn)
+	for {
+		len, erro := reader.Read(buf[:])
+		if erro != nil {
+			log.Println("接收：" + err.Error())
+			err = erro
+			return
+		}
+		// fmt.Println("接收数据长度：", len)
+		temp := string(buf[:len])
+		// fmt.Println("数据: " + temp)
+		str += temp
+		if strings.HasSuffix(temp, "#") {
+			break
 		}
 	}
-	return nil
+	// fmt.Println("接收数据完毕")
+	// fmt.Println("result: " + str)
+	if str == "-1 #" {
+		return
+	}
+	//将字符串转换为对象
+	result.Str2Obj(str)
+	return
+}
+
+func (result *KlotskiResult) Str2Obj(str string) {
+	nums := strings.Split(str, " ")
+	ii := 0
+	jj := 0
+	kk := 0
+	for i, value := range nums {
+		// fmt.Println("i = ", i, " value = ", value)
+		if value == "#" {
+			break
+		}
+		num, _ := strconv.Atoi(value)
+		if i == 0 {
+			result.Width = num
+		} else if i == 1 {
+			result.Height = num
+		} else if i == 2 {
+			result.Target = num
+		} else if i == 3 {
+			result.DataLen = num
+			result.Data = make([][][]int, num)
+			for k := 0; k < result.DataLen; k++ {
+				result.Data[k] = make([][]int, result.Height)
+				for j := 0; j < result.Height; j++ {
+					result.Data[k][j] = make([]int, result.Width)
+				}
+			}
+		} else {
+			result.Data[ii][jj][kk] = num
+			kk++
+			if kk == result.Width {
+				kk = 0
+				jj++
+				if jj == result.Height {
+					jj = 0
+					ii++
+				}
+			}
+		}
+	}
 }
