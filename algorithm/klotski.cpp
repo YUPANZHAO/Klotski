@@ -175,6 +175,8 @@ public:
         vector<int> myend = bfs();
         printres(myend);
 
+        if(ans.size() == 1 && !isend(myend)) return "-1";
+
         string res = "";
         res += to_string(width);
         res += ' ';

@@ -33,6 +33,7 @@ void do_accept(void* arg) {
     if(ret == -1) {
         cerr << "epoll_ctl add error" << endl;
     }
+    cout << "一名用户已连接" << endl;
 }
 
 void solve(void* arg) {
@@ -41,12 +42,14 @@ void solve(void* arg) {
     size_t size = sizeof(buf) / sizeof(buf[0]);
     string data = "";
     //读取数据
+    cout << "开始读取数据" << endl;
     while(true) {
         int len = recv(info->fd, buf, size, 0);
         //用户断开连接
         if(len == 0) {
             epoll_ctl(info->epfd, EPOLL_CTL_DEL, info->fd, NULL);
             close(info->fd);
+            cout << "用户断开连接" << endl;
             return;
         }
         if(len == -1) {
@@ -58,14 +61,20 @@ void solve(void* arg) {
         }
         for(int i=0; i < len; ++i) data += buf[i];
     }
+    cout << "读取数据完毕" << endl;
+    cout << "数据：" + data << endl;
+    cout << "开始执行算法" << endl;
     //执行算法
     Klotski algo;
-    string res = algo.solve(data);
+    string res = algo.solve(data) + " #";
     //发送数据
+    cout << "开始发送数据" << endl;
+    cout << "数据：" + res << endl;
     int ret = send(info->fd, res.data(), res.length(), 0);
     if(ret == -1) {
         cerr << "send res error" << endl;
     }
+    cout << "发送数据结束" << endl;
 }
 
 int main() {
@@ -79,7 +88,7 @@ int main() {
     sockaddr_in addr;
     addr.sin_family = AF_INET;
     addr.sin_port = htons(4331);
-    addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    addr.sin_addr.s_addr = inet_addr("192.168.71.2");
     //绑定地址
     int ret = bind(lfd, (sockaddr*)&addr, sizeof(addr));
     if(ret == -1) {
