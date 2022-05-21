@@ -5,6 +5,7 @@ import (
 	"KlotskiWeb/config"
 	"KlotskiWeb/model"
 	"crypto/rand"
+	"fmt"
 	"log"
 	"math/big"
 	"net/http"
@@ -117,7 +118,8 @@ func sendVerifyEmail(toEmail string, code string) (err error) {
 // 生成6位数字的验证码
 func generateCode() string {
 	num, _ := rand.Int(rand.Reader, big.NewInt(1000000))
-	return num.String()
+	str := fmt.Sprintf("%06d", num)
+	return str
 }
 
 // 写入redis并设置60秒生存期
