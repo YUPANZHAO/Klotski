@@ -37,5 +37,4 @@ func main() {
 	log.Print("服务已关闭")
 	//关闭连接
 	common.CloseRedisDB()
-	common.CloseMysqlDB()
 }

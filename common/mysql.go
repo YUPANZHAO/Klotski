@@ -18,20 +18,13 @@ func InitMysqlDB() error {
 
 	var err error
 	MysqlDB, err = sql.Open("mysql", connStr)
+
+	MysqlDB.SetMaxOpenConns(10)
+	MysqlDB.SetMaxIdleConns(5)
+
 	if err != nil {
 		return err
 	}
 
-	err = MysqlDB.Ping()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func CloseMysqlDB() error {
-	if MysqlDB != nil {
-		return MysqlDB.Close()
-	}
 	return nil
 }

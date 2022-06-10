@@ -20,7 +20,7 @@ func NewMessage() Message {
 }
 
 func WriteMessage(w http.ResponseWriter, code int, msg string, data any) {
-	w.WriteHeader(code)
+	// w.WriteHeader(code)
 	temp := NewMessage()
 	temp.Code = code
 	temp.Msg = msg
