@@ -128,21 +128,42 @@ private:
         return s;
     }
 
-    vector<vector<int>> ans;
+    // vector<vector<int>> ans;
+    vector<pair<int,int>> ans;
 
-    void printmap(vector<int> & map) {
-        ans.push_back(map);
-    }
+    // void printmap(vector<int> & map) {
+    //     ans.push_back(map);
+    // }
 
     void printres(vector<int> & now) {
         if(now == s) {
-            printmap(now);
+            // printmap(now);
             return ;
         }
         Move m = path[now];
         printres(m.now);
-        printmap(now);
+        // printmap(now);
+        ans.push_back(make_pair(m.id, m.dire));
     }
+
+    vector<int> _lsh_num;
+    set<int> _all_num;
+
+    void lsh() {
+        _lsh_num.push_back(0);
+        for(int num : s) if(num) _all_num.insert(num);
+        int idx = 1;
+        for(int num : _all_num) {
+            _lsh_num.push_back(num);
+            for(int& x : s) if(x == num) x = idx;
+            if(g == num) g = idx;
+            ++idx;
+        }
+    }
+
+    int get_pre_num(int x) {
+        return _lsh_num[x];
+    } 
 
 public:
 
@@ -157,6 +178,8 @@ public:
             }
         }
         if(!(ss >> n >> g)) return "-1";
+        lsh();
+        if(g < 1 || g > n) return "-1";
         int d[2][4] = {1,-1,0,0,0,0,1,-1};
         for(int i=0; i < height; i++) {
             for(int j=0; j < width; j++) {
@@ -182,17 +205,27 @@ public:
         res += ' ';
         res += to_string(height);
         res += ' ';
-        res += to_string(g);
+        res += to_string(get_pre_num(g));
         res += ' ';
-        res += to_string(ans.size());
+        res += to_string(ans.size()+1);
+        // for(auto item : ans) {
+        //     for(int i=0; i < height; i++) {
+        //         for(int j=0; j < width; j++) {
+        //             res += ' ';
+        //             res += to_string(item[e(i, j)]);
+        //         }
+        //     }
+        // }
         for(auto item : ans) {
-            for(int i=0; i < height; i++) {
-                for(int j=0; j < width; j++) {
-                    res += ' ';
-                    res += to_string(item[e(i, j)]);
-                }
-            }
+            res += ' ';
+            res += get_pre_num(item.first);
+            res += ' ';
+            res += item.second;
         }
+        res += ' ';
+        res += get_pre_num(g);
+        res += ' ';
+        res += 1;
         return res;
     }
 

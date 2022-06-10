@@ -17,12 +17,17 @@ type KlotskiData struct {
 	Target      int     //目标块
 }
 
+type BlockMoveInfo struct {
+	BlockId		int		//滑块编号		
+	MoveDire	int		//移动方向
+} 
+
 type KlotskiResult struct {
-	Width   int       //宽度
-	Height  int       //高度
-	Target  int       //目标块
-	DataLen int       //数据长度
-	Data    [][][]int //滑块编号二维数组
+	Width   int       			//宽度
+	Height  int       			//高度
+	Target  int       			//目标块
+	DataLen int       			//数据长度
+	Data    []BlockMoveInfo     //解密过程
 }
 
 func (data *KlotskiData) Obj2Str() string {
@@ -86,9 +91,8 @@ func (data *KlotskiData) Solve() (result KlotskiResult, err error) {
 
 func (result *KlotskiResult) Str2Obj(str string) {
 	nums := strings.Split(str, " ")
-	ii := 0
-	jj := 0
-	kk := 0
+	flag := 0
+	idx := 0
 	for i, value := range nums {
 		// fmt.Println("i = ", i, " value = ", value)
 		if value == "#" {
@@ -103,24 +107,15 @@ func (result *KlotskiResult) Str2Obj(str string) {
 			result.Target = num
 		} else if i == 3 {
 			result.DataLen = num
-			result.Data = make([][][]int, num)
-			for k := 0; k < result.DataLen; k++ {
-				result.Data[k] = make([][]int, result.Height)
-				for j := 0; j < result.Height; j++ {
-					result.Data[k][j] = make([]int, result.Width)
-				}
-			}
+			result.Data = make([]BlockMoveInfo, num)
 		} else {
-			result.Data[ii][jj][kk] = num
-			kk++
-			if kk == result.Width {
-				kk = 0
-				jj++
-				if jj == result.Height {
-					jj = 0
-					ii++
-				}
+			if flag == 0 {
+				result.Data[idx].BlockId = value
+			}else {
+				result.Data[idx].MoveDire = value
+				idx++
 			}
+			flag ^= 1
 		}
 	}
 }
