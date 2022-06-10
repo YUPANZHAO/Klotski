@@ -198,7 +198,7 @@ public:
         vector<int> myend = bfs();
         printres(myend);
 
-        if(ans.size() == 1 && !isend(myend)) return "-1";
+        if(ans.size() == 0 && !isend(myend)) return "-1";
 
         string res = "";
         res += to_string(width);
@@ -218,14 +218,13 @@ public:
         // }
         for(auto item : ans) {
             res += ' ';
-            res += get_pre_num(item.first);
+            res += to_string(get_pre_num(item.first));
             res += ' ';
-            res += item.second;
+            res += to_string(item.second);
         }
         res += ' ';
-        res += get_pre_num(g);
-        res += ' ';
-        res += 1;
+        res += to_string(get_pre_num(g));
+        res += " 1";
         return res;
     }
 
