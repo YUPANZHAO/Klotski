@@ -18,16 +18,16 @@ type KlotskiData struct {
 }
 
 type BlockMoveInfo struct {
-	BlockId		int		//滑块编号		
-	MoveDire	int		//移动方向
-} 
+	BlockId  int //滑块编号
+	MoveDire int //移动方向
+}
 
 type KlotskiResult struct {
-	Width   int       			//宽度
-	Height  int       			//高度
-	Target  int       			//目标块
-	DataLen int       			//数据长度
-	Data    []BlockMoveInfo     //解密过程
+	Width   int             //宽度
+	Height  int             //高度
+	Target  int             //目标块
+	DataLen int             //数据长度
+	Data    []BlockMoveInfo //解密过程
 }
 
 func (data *KlotskiData) Obj2Str() string {
@@ -110,9 +110,9 @@ func (result *KlotskiResult) Str2Obj(str string) {
 			result.Data = make([]BlockMoveInfo, num)
 		} else {
 			if flag == 0 {
-				result.Data[idx].BlockId = value
-			}else {
-				result.Data[idx].MoveDire = value
+				result.Data[idx].BlockId = num
+			} else {
+				result.Data[idx].MoveDire = num
 				idx++
 			}
 			flag ^= 1

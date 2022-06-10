@@ -17,7 +17,7 @@ Authorization: Bearer l2wneNpKYBjK38N8B118PKpuw8K4CQqD
 ### solve
 GET http://localhost:8080/klotskiSolve HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer XHfNE2ZVP6m29UQCx17l8dafpbI4gzj1
+Authorization: Bearer i96srM8OX6XNV8k93LN3Uq605Ql152vl
 
 {
     "Width": 6,
