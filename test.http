@@ -17,11 +17,10 @@ Authorization: Bearer l2wneNpKYBjK38N8B118PKpuw8K4CQqD
 ### solve
 GET http://localhost:8080/klotskiSolve HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer i96srM8OX6XNV8k93LN3Uq605Ql152vl
+Authorization: Bearer DRjFSpaftbyFekf2i7fW4371VieYeghR
 
 {
-    "Width": 6,
-    "Height": 6,
+    "BlockNumber": 9,
     "Data": [
         [0, 0, 1, 2, 2, 2],
         [3, 0, 1, 4, 0, 5],
@@ -30,6 +29,7 @@ Authorization: Bearer i96srM8OX6XNV8k93LN3Uq605Ql152vl
         [0, 7, 9, 9, 0, 8],
         [0, 0, 0, 0, 0, 0]
     ],
-    "BlockNumber": 9,
-    "Target": 6
+    "Height": 6,
+    "Target": 6,
+    "Width": 6
 }

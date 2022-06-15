@@ -19,13 +19,10 @@ func handleKlotskiSolve(w http.ResponseWriter, r *http.Request) {
 		model.WriteMessage(w, 400, "用户次数为零", nil)
 		return
 	}
-	//获取请求Body
-	length := r.ContentLength
-	body := make([]byte, length)
-	r.Body.Read(body)
-	//将数据解析成KlotskiData是实体
+	// 将数据解析成KlotskiData是实体
 	data := model.KlotskiData{}
-	err = json.Unmarshal(body, &data)
+	dec := json.NewDecoder(r.Body)
+	err = dec.Decode(&data)
 	if err != nil {
 		model.WriteMessage(w, 400, "数据异常: "+err.Error(), nil)
 		return
