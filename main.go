@@ -15,13 +15,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	log.Print("Redis连接成功")
+	log.Print("Redis连接成功!")
 
 	err = common.InitMysqlDB()
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	log.Print("Mysql连接成功")
+	log.Print("Mysql连接成功!")
 
 	conf := config.NewServerConfig()
 
